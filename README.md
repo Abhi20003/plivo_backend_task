@@ -36,6 +36,15 @@ python main.py
 
 The server will start on `http://0.0.0.0:8000`
 
+## Base URL
+
+**Replit Deployment:**
+```
+https://2b92d6ba-a729-406d-9e8b-912b3c0d983c-00-2noqwgor71lq4.sisko.replit.dev
+```
+
+All API endpoints and WebSocket connections should use this base URL when accessing the deployed instance.
+
 ## API Usage
 
 ### WebSocket Endpoint: `/ws`
@@ -166,7 +175,7 @@ Connect to the WebSocket endpoint to publish, subscribe, unsubscribe, and ping.
 
 #### Create Topic
 ```bash
-POST /topics
+POST https://2b92d6ba-a729-406d-9e8b-912b3c0d983c-00-2noqwgor71lq4.sisko.replit.dev/topics
 Content-Type: application/json
 
 {
@@ -180,7 +189,7 @@ Content-Type: application/json
 
 #### Delete Topic
 ```bash
-DELETE /topics/{name}
+DELETE https://2b92d6ba-a729-406d-9e8b-912b3c0d983c-00-2noqwgor71lq4.sisko.replit.dev/topics/{name}
 ```
 
 **Responses:**
@@ -191,7 +200,7 @@ DELETE /topics/{name}
 
 #### List Topics
 ```bash
-GET /topics
+GET https://2b92d6ba-a729-406d-9e8b-912b3c0d983c-00-2noqwgor71lq4.sisko.replit.dev/topics
 ```
 
 **Response:**
@@ -208,7 +217,7 @@ GET /topics
 
 #### Health Check
 ```bash
-GET /health
+GET https://2b92d6ba-a729-406d-9e8b-912b3c0d983c-00-2noqwgor71lq4.sisko.replit.dev/health
 ```
 
 **Response:**
@@ -222,7 +231,7 @@ GET /health
 
 #### Statistics
 ```bash
-GET /stats
+GET https://2b92d6ba-a729-406d-9e8b-912b3c0d983c-00-2noqwgor71lq4.sisko.replit.dev/stats
 ```
 
 **Response:**
@@ -241,7 +250,7 @@ GET /stats
 
 ### Connection Flow
 
-1. **Connect** to `ws://localhost:8000/ws`
+1. **Connect** to `wss://2b92d6ba-a729-406d-9e8b-912b3c0d983c-00-2noqwgor71lq4.sisko.replit.dev/ws` (or `ws://localhost:8000/ws` for local development)
 2. **Create Topic** (via HTTP REST API) before subscribing
 3. **Subscribe** to topics using the `subscribe` message type
 4. **Receive Events** as `event` messages when messages are published
@@ -256,7 +265,7 @@ import websockets
 import json
 
 async def client_example():
-    uri = "ws://localhost:8000/ws"
+    uri = "wss://2b92d6ba-a729-406d-9e8b-912b3c0d983c-00-2noqwgor71lq4.sisko.replit.dev/ws"
     async with websockets.connect(uri) as websocket:
         # Subscribe
         await websocket.send(json.dumps({
@@ -477,13 +486,13 @@ Example test using `curl` and `websocat`:
 
 ```bash
 # Create a topic
-curl -X POST http://localhost:8000/topics -H "Content-Type: application/json" -d '{"name":"test"}'
+curl -X POST https://2b92d6ba-a729-406d-9e8b-912b3c0d983c-00-2noqwgor71lq4.sisko.replit.dev/topics -H "Content-Type: application/json" -d '{"name":"test"}'
 
 # Check health
-curl http://localhost:8000/health
+curl https://2b92d6ba-a729-406d-9e8b-912b3c0d983c-00-2noqwgor71lq4.sisko.replit.dev/health
 
 # Connect via WebSocket (using websocat)
-echo '{"type":"subscribe","topic":"test","client_id":"client1"}' | websocat ws://localhost:8000/ws
+echo '{"type":"subscribe","topic":"test","client_id":"client1"}' | websocat wss://2b92d6ba-a729-406d-9e8b-912b3c0d983c-00-2noqwgor71lq4.sisko.replit.dev/ws
 ```
 
 ## Limitations
